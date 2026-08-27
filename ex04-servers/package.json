@@ -1,0 +1,17 @@
+{
+  "name": "node-http-server",
+  "version": "1.0.0",
+  "description": "Http server built from scratch",
+  "keywords": [
+    "nodejs",
+    "http",
+    "express"
+  ],
+  "license": "ISC",
+  "author": "durisosa",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}

@@ -1,5 +1,5 @@
-const net = require("net")
+const ft_http = require("./ft_http/index.js")
 
-const server = net.createServer((socket) => {
-    console.log("socet", socket);
+const server = ft_http.createServer((server) => {
+    console.log(server, "this is my server")
 })
