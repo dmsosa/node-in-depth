@@ -1,4 +1,5 @@
-const net = require("net")
+const net = require("net");
+const { parsers } = require("./common");
 
 function Server(options, requestListener) {
     if (typeof options == 'function') {
@@ -23,14 +24,13 @@ function Server(options, requestListener) {
     this.on('connection', (socket) => {
         connectionListenerInternal(this, socket)
     });
-    this.emit('request', this);
 }
 
 Object.setPrototypeOf(Server.prototype, net.Server.prototype);
 Object.setPrototypeOf(Server, net.Server);
 
 function connectionListenerInternal(server, socket) {
-    debug('SERVER new http connection');
+    console.debug('SERVER new http connection');
     const state = {
         incoming: [],
         outgoing: [],
@@ -39,17 +39,39 @@ function connectionListenerInternal(server, socket) {
         outgoingData: 0,
         requestsCount: 0,
     }
-    
-    const parser = parsers.alloc()
 
+    const parser = parsers.alloc()
+    let req = null;
     socket.on('data', (data) => {
-        debug('SERVER socketOnData %d', dara.length);
-        const result = parser.execute(data);
+        console.debug('SERVER socketOnData %d', data.length);
+        parser.execute(data);
     });
 
     socket.on('error', (error) => {
         console.log(error)
     });
+
+    parser.on('onMessageBegin', () => {
+        console.log('The Http Incoming Message begun')
+
+    })
+    parser.on('headersEnd', (headers) => {
+        console.log('The Http headersEnd', headers)
+        req = new ServerReq(socket);
+
+        req.method = headers.method;
+        req.url = headers.url;
+        req.headers = headers.headers;
+    })
+    parser.on('bodyCompleted', (body) => {
+        console.log('The Http headersEnd')
+        req = new ServerReq(socket);
+
+        req.method = headers.method;
+        req.url = headers.url;
+        req.headers = headers.headers;
+        this.emit('request', this);
+    })
 }
 
 /**

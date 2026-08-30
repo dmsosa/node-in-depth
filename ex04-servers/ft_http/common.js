@@ -13,7 +13,7 @@ class FreeList {
   alloc() {
     return this.list.length > 0 ?
       this.list.pop() :
-      ReflectApply(this.ctor, this, arguments);
+      Reflect.apply(this.ctor, this, arguments);
   }
 
   free(obj) {
